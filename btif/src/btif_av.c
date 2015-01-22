@@ -343,6 +343,20 @@ static BOOLEAN btif_av_state_idle_handler(btif_sm_event_t event, void *p_data)
             btif_rc_handler(event, (tBTA_AV*)p_data);
             break;
 
+        case BTIF_AV_STOP_STREAM_REQ_EVT:
+            if (btif_av_cb.peer_sep == AVDT_TSEP_SNK)
+            {
+              /* immediately flush any pending tx frames while suspend is pending */
+              btif_a2dp_set_tx_flush(TRUE);
+            }
+            if (btif_av_cb.peer_sep == AVDT_TSEP_SRC)
+            {
+                btif_a2dp_set_rx_flush(TRUE);
+            }
+
+            btif_a2dp_on_stopped(NULL);
+            break;
+
         case BTA_AV_RC_CLOSE_EVT:
             if (tle_av_open_on_rc.in_use) {
                 BTIF_TRACE_DEBUG("BTA_AV_RC_CLOSE_EVT: Stopping AV timer.");
