@@ -43,6 +43,11 @@ LOCAL_CFLAGS += \
 	-DBOARD_HAVE_BLUETOOTH_BCM
 endif
 
+ifeq ($(BOARD_USE_AR3K_BLUETOOTH),true)
+LOCAL_CFLAGS += \
+	-DBOARD_USE_AR3K_BLUETOOTH
+endif
+
 LOCAL_SRC_FILES:= \
     ./a2dp/a2d_api.c \
     ./a2dp/a2d_sbc.c \
