@@ -426,7 +426,7 @@ void bta_hh_co_data(UINT8 dev_handle, UINT8 *p_rpt, UINT16 len, tBTA_HH_PROTO_MO
     }
 
     // Send the HID data to the kernel.
-    if ((p_dev->fd >= 0) && p_dev->ready_for_data) {
+    if (p_dev->fd >= 0) {
         bta_hh_co_write(p_dev->fd, p_rpt, len);
     }else {
         APPL_TRACE_WARNING("%s: Error: fd = %d, ready %d, len = %d", __FUNCTION__, p_dev->fd, 
