@@ -246,18 +246,18 @@ static void btif_initiate_av_open_tmr_hdlr(TIMER_LIST_ENT *tle)
 
 static void btif_report_connection_state(btav_connection_state_t state, bt_bdaddr_t *bd_addr)
 {
-    if (bt_av_sink_callbacks != NULL) {
+    if (btif_av_cb.peer_sep == AVDT_TSEP_SRC && bt_av_sink_callbacks != NULL) {
         HAL_CBACK(bt_av_sink_callbacks, connection_state_cb, state, bd_addr);
-    } else if (bt_av_src_callbacks != NULL) {
+    } else if (btif_av_cb.peer_sep == AVDT_TSEP_SNK && bt_av_src_callbacks != NULL) {
         HAL_CBACK(bt_av_src_callbacks, connection_state_cb, state, bd_addr);
     }
 }
 
 static void btif_report_audio_state(btav_audio_state_t state, bt_bdaddr_t *bd_addr)
 {
-    if (bt_av_sink_callbacks != NULL) {
+    if (btif_av_cb.peer_sep == AVDT_TSEP_SRC && bt_av_sink_callbacks != NULL) {
         HAL_CBACK(bt_av_sink_callbacks, audio_state_cb, state, bd_addr);
-    } else if (bt_av_src_callbacks != NULL) {
+    } else if (btif_av_cb.peer_sep == AVDT_TSEP_SNK && bt_av_src_callbacks != NULL) {
         HAL_CBACK(bt_av_src_callbacks, audio_state_cb, state, bd_addr);
     }
 }
