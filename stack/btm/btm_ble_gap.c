@@ -3434,6 +3434,13 @@ BOOLEAN btm_ble_topology_check(tBTM_BLE_STATE_MASK request_state_mask)
     UINT8   mask, offset;
     UINT8   request_state = 0;
 
+#ifdef BOARD_USE_FORCE_BLE
+    /* For BT chips that don't support BLE capibility read command so we force it */
+    BTM_TRACE_WARNING("We will force enable BLE");
+    if (request_state_mask == BTM_BLE_STATE_INIT)
+        return (TRUE);
+#endif
+
     /* check only one bit is set and within valid range */
     if (request_state_mask == BTM_BLE_STATE_INVALID ||
         request_state_mask > BTM_BLE_STATE_SCAN_ADV_BIT ||

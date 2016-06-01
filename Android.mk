@@ -19,6 +19,11 @@ endif
 
 bluetooth_CFLAGS += -DEXPORT_SYMBOL="__attribute__((visibility(\"default\")))"
 
+ifeq ($(BOARD_USE_FORCE_BLE),true)
+bluetooth_CFLAGS += \
+	-DBOARD_USE_FORCE_BLE
+endif
+
 #
 # Common C/C++ compiler flags.
 #
