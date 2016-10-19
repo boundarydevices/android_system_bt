@@ -35,6 +35,7 @@
 #include "btu.h"
 #include "bt_common.h"
 #include "osi/include/allocator.h"
+#include "osi/include/properties.h"
 
 /*****************************************************************************
 **  Constants & Macros
@@ -1204,7 +1205,17 @@ bt_status_t btif_av_init(int service_id)
         if (!btif_a2dp_start_media_task())
             return BT_STATUS_FAIL;
 
-        btif_enable_service(service_id);
+    char profilebit[PROPERTY_VALUE_MAX];
+    property_get("persist.bluetooth.a2dpsink",profilebit,"0");
+
+    if(strcmp(profilebit,"0") == 0) {
+        btif_enable_service(BTA_A2DP_SOURCE_SERVICE_ID);
+    }
+    #if (BTA_AV_SINK_INCLUDED == TRUE)
+    else if(strcmp(profilebit,"1") == 0) {
+        btif_enable_service(BTA_A2DP_SINK_SERVICE_ID);
+    }
+    #endif
 
         /* Also initialize the AV state machine */
         btif_av_cb.sm_handle =
