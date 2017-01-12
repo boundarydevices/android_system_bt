@@ -1206,7 +1206,7 @@ bt_status_t btif_av_init(int service_id)
             return BT_STATUS_FAIL;
 
     char profilebit[PROPERTY_VALUE_MAX];
-    property_get("persist.bluetooth.a2dpsink",profilebit,"0");
+    property_get("persist.sys.a2dpsink",profilebit,"0");
 
     if(strcmp(profilebit,"0") == 0) {
         btif_enable_service(BTA_A2DP_SOURCE_SERVICE_ID);
