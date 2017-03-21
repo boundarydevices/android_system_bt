@@ -17,6 +17,11 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
 bdroid_CFLAGS += -DBLUEDROID_DEBUG
 endif
 
+ifeq ($(BOARD_SUPPORTS_BLE_VND),true)
+bdroid_CFLAGS += \
+	-DBOARD_SUPPORTS_BLE_VND
+endif
+
 bdroid_CFLAGS += \
   -Wall \
   -Wno-unused-parameter \
