@@ -24,6 +24,11 @@ bluetooth_CFLAGS += \
 	-DBOARD_USE_FORCE_BLE
 endif
 
+ifeq ($(BOARD_SUPPORTS_BLE_VND),true)
+bluetooth_CFLAGS += \
+	-DBOARD_SUPPORTS_BLE_VND
+endif
+
 #
 # Common C/C++ compiler flags.
 #
