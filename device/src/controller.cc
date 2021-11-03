@@ -247,16 +247,24 @@ static future_t* start_up(void) {
     }
 
     if (HCI_LE_DATA_LEN_EXT_SUPPORTED(features_ble.as_array)) {
-      response =
-          AWAIT_COMMAND(packet_factory->make_ble_read_maximum_data_length());
-      packet_parser->parse_ble_read_maximum_data_length_response(
-          response, &ble_supported_max_tx_octets, &ble_supported_max_tx_time,
-          &ble_supported_max_rx_octets, &ble_supported_max_rx_time);
-
       response = AWAIT_COMMAND(
           packet_factory->make_ble_read_suggested_default_data_length());
       packet_parser->parse_ble_read_suggested_default_data_length_response(
           response, &ble_suggested_default_data_length);
+
+      response =
+          AWAIT_COMMAND(packet_factory->make_ble_read_maximum_data_length());
+      /* Workaround for QCA9377 firmware that doesn't return proper values */
+      if (*(response->data + response->offset + 1) < 12) {
+        ble_supported_max_rx_time = BTM_BLE_DATA_TX_TIME_MAX;
+        ble_supported_max_tx_time = BTM_BLE_DATA_TX_TIME_MAX;
+        ble_supported_max_rx_octets = ble_suggested_default_data_length;
+        ble_supported_max_tx_octets = ble_suggested_default_data_length;
+      } else {
+        packet_parser->parse_ble_read_maximum_data_length_response(
+            response, &ble_supported_max_tx_octets, &ble_supported_max_tx_time,
+            &ble_supported_max_rx_octets, &ble_supported_max_rx_time);
+      }
     }
 
     if (HCI_LE_EXTENDED_ADVERTISING_SUPPORTED(features_ble.as_array)) {
